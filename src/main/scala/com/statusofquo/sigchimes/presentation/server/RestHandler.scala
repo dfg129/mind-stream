@@ -1,32 +1,35 @@
 import akka.actor.ActorSystem
+import akka.http.scaladsl.server.Directives._
 import akka.event.{LoggingAdapter, Logging}
-import akka.htto.scaladsl.Http
+import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.{HttpResponse, HttpRequest}
 import akka.http.scaladsl.model.StatusCodes
 import akka.stream.{ActorMaterializer, Materializer}
-import akka.stream.{Flow, Sink, Source}
+import akka.stream.scaladsl.{Flow, Sink, Source}
 import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory
 import java.io.IOException
-import scala.concurrent.ExecutionContextExecutor, Future}
-import scala.math._
+import scala.concurrent.{ExecutionContextExecutor, Future}
 
 
-val routes = {
-  logRequestResult("rest-handler") {
-    path
-  }
-}
+object RestHandler extends App {
+ implicit val system = ActorSystem()
+ implicit val executor = system.dispatcher
+ implicit val materializer = ActorMaterializer()
 
+ val routes = {
+      path("test") {
+        get {
+          complete {
+               HttpResponse(entity="<h1> here and there and everywhere </h1>")
+             }
+          }
+        }
+      }
 
-object RestHandler extends App with Service {
-  override implicit val system = ActorSystem()
-  override implicit val executor = system.dispatcher
-  override implicit val materializer = ActorMaterializer()
+ val config = ConfigFactory.load()
+ val logger = Logging(system, getClass)
 
-  override val config = ConfigFactory.load()
-  override val logger = Logging(system, getClass
-
-  Http().bindAndHandle(routes, config.getString("http.interface"), config.getInt("http.port"))
+ Http().bindAndHandle(routes, config.getString("http.interface"), config.getInt("http.port"))
 
 }
