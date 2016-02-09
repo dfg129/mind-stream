@@ -1,3 +1,6 @@
+
+package com.statusofquo.sigchimes.persistence
+
 import akka.actor.{ ActorRef, ActorSystem, Props, Actor, Inbox }
 import scala.concurrent.duration._
 

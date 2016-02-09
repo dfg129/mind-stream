@@ -1,3 +1,6 @@
+
+package com.statusofquo.sigchimes.presentation.server
+
 import akka.actor.ActorSystem
 import akka.http.scaladsl.server.Directives._
 import akka.event.{LoggingAdapter, Logging}
