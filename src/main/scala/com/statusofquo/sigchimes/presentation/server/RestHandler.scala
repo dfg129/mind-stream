@@ -15,7 +15,7 @@ import java.io.IOException
 import scala.concurrent.{ExecutionContextExecutor, Future}
 
 
-object RestHandler extends App {
+object RestHandler  {
  implicit val system = ActorSystem()
  implicit val executor = system.dispatcher
  implicit val materializer = ActorMaterializer()
