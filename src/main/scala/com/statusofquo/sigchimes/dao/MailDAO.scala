@@ -4,6 +4,8 @@ package com.statusofquo.sigchimes.persistence
 import akka.actor.{ ActorRef, ActorSystem, Props, Actor, Inbox }
 import scala.concurrent.duration._
 import slick.driver.PostgresDriver.api._
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 
 case object Greet
@@ -33,7 +35,6 @@ object HelloAkka  extends App {
   }
   val suppliers = TableQuery[Suppliers]
 
-
   class Coffees(tag: Tag) extends Table[(String, Int, Double)](tag, "COFFEES"){
     def name = column[String]("COF_NAME", O.PrimaryKey)
     def supID = column[Int]("SUP_ID")
@@ -56,7 +57,26 @@ object HelloAkka  extends App {
     )
   )
 
- val setupFuture = db.run(setup)
+val setupFuture = db.run(setup)
+
+ setupFuture.onSuccess { case _ => println("Coffees: good") }
+
+ setupFuture onFailure { case e => println("Coffee failed : " + e) }
+
+
+ val q2 = for {
+   c <- coffees
+   s <- suppliers
+ } yield (c.name, s.name)
+
+ val f: Future[Seq[(String, String)]] = db.run(q2.result)
+
+ f.onSuccess { case s => println(s"Result: $s")}
+
+
+ println("done")
+
+ Thread.sleep(50000000)
 
 /*  val system = ActorSystem("helloakka")
 
