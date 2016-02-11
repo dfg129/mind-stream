@@ -1,15 +1,13 @@
 
-package com.statusofquo.sigchimes.persistence.dao
+package dao
 
 
 import models.definitions.{UsersTable, AddressesTable, EmailsTable}
 import slick.dbio.{Effect, NoStream}
 import slick.lifted.TableQuery
-import slick.profile.{FixedSqlAction, SqlAction, FixedSqlStreamAction}
+import slick.profile.{FixedSqlAction, SqlAction, FixedSqlStreamingAction}
 import utils.DatabaseConfig
 import scala.concurrent.Future
-
-
 
 
 trait BaseDAO extends DatabaseConfig {
@@ -22,7 +20,7 @@ trait BaseDAO extends DatabaseConfig {
     db.run(action)
   }
 
-  protected implicit def executeReadStreamFromDb[A](action: FixedSqlStreamingAction[Seq[A], A, _ <: slick.dbio.Effect]): Future[A] = {
+  protected implicit def executeReadStreamFromDb[A](action: FixedSqlStreamingAction[Seq[A], A, _ <: slick.dbio.Effect]): Future[Seq[A]] = {
     db.run(action)
   }
 }

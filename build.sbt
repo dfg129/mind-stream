@@ -11,7 +11,7 @@ lazy val akkaVersion = "2.4.2-RC2"
 lazy val root = (project in file(".")).
   settings(commonSettings: _*).
   settings(
-    name := "sigchimes"
+    name := "Mind@Stream"
   )
 
 libraryDependencies ++= Seq(
