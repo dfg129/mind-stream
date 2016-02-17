@@ -1,7 +1,8 @@
+package com.statusofquo.mindstream.persistence
 package dao
 
 
-import models.{AddressId, Address}
+import models.{Address, AddressId}
 import slick.driver.PostgresDriver.api._
 import scala.concurrent.Future
 

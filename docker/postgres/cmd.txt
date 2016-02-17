@@ -1,0 +1,3 @@
+docker run --rm -p 4009:5432 --name sgdbc sgdbi2
+
+psql -h $(docker-machine ip) -p 4009 -d docker -U docker --password

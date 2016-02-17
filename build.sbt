@@ -23,5 +23,5 @@ libraryDependencies ++= Seq(
       "org.postgresql"     %  "postgresql"    % "9.4-1201-jdbc41",
       "org.slf4j" % "slf4j-nop" % "1.6.4",
       "org.scalactic" %% "scalactic" % "2.2.6",
-      "org.scalatest" %% "scalatest_2.11" % "2.2.6" % "test"
+      "org.scalatest" %% "scalatest" % "2.2.6" % "test"
 )

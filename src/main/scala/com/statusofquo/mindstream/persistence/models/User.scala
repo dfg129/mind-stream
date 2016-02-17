@@ -1,3 +1,4 @@
+package com.statusofquo.mindstream.persistence
 package models
 
 
