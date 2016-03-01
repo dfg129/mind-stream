@@ -1,3 +1,4 @@
+package com.statusofquo.mindstream.persistence
 package utils
 
 import com.typesafe.config.ConfigFactory

@@ -2,22 +2,28 @@ package com.statusofquo.mindstream.persistence
 package dao
 
 import org.scalatest._
+import org.scalatest.concurrent.ScalaFutures
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import models.DreamsPost
 
-class DreamsPostsUnitTest extends UnitTest("DreamsPostsDAO") {
+class DreamsPostsUnitTest { //extends UnitTest("DreamsPostsDAO") with ScalaFutures{
+
+/*  override def withFixture(test: NoArgTest) = {
+    super.withFixture(test) match {
+      case failed: Failed =>
+        println("this test failed")
+    }
+  }
+
 
   "A DreamsPost" should "be present using findAll" in {
-    val postDAO = DreamsPostsDAO();
-    val result: Future[Seq[DreamsPost]] = postDAO.findAll();
+    val f: Future[Seq[DreamsPost]] = DreamsPostsDAO findAll
 
-    assert(result != null)
-    val dp = for {
-      posts <- result
-      post <- posts head
-    } yield ( post )
-
-    assert(dp != null)
-  }
+    whenReady(f) { result =>
+      println(result)
+      assert(result != null)
+    }
+  } */
 }
