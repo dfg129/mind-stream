@@ -13,11 +13,14 @@ import scala.util.{ Try, Success, Failure }
 import java.io._
 import java.security._
 import javax.net.ssl._
+import scala.concurrent.Future
+import scala.concurrent.duration._
 
 class ContainerInfoActor(next: ActorRef) extends Actor {
 
   import akka.pattern.pipe
   import context.dispatcher
+
 
   val actorSystem = ActorSystem("docker")
 
@@ -26,28 +29,32 @@ class ContainerInfoActor(next: ActorRef) extends Actor {
 
   final implicit val materializer: ActorMaterializer = ActorMaterializer(ActorMaterializerSettings(actorSystem))
 
+  val timeout = 2.seconds
+
   val http = Http(actorSystem)
   http.setDefaultClientHttpsContext(ContainerInfo.createHttpsContext)
 
  override def preStart() = {
-    log.debug("#######  In the preStart")
-
     http.singleRequest(HttpRequest(uri = "https://192.168.99.101:2376/info"))
      .pipeTo(self)
    }
 
   def receive = {
     case HttpResponse(StatusCodes.OK, headers, entity, _) =>
-      log.debug("### Got response, body: " + entity.dataBytes.runFold(ByteString(""))(_ ++ _))
+      val bs: Future[ByteString] = entity.toStrict(timeout).map { _.data }
+      val s: Future[String] = bs.map(_.utf8String)
+      s onSuccess {
+        case json => log.debug(json)
+      }
+      s onFailure {
+        case _ => log.debug("!!!!!!! failure")
+      }
     case HttpResponse(code, _, _, _) =>
       log.debug("### Request failed, response code: " + code)
     case msg: Status.Failure => {
-      log.debug("--------- received message of type {}", msg.cause.printStackTrace());
-
-      }
-        log.debug("@@@@@@@@@@@@@@@@@@@@@@@")
+      log.debug("--------- received message of type {}", msg.cause.printStackTrace())
     }
-
+  }
 }
 
 object ContainerInfo {
