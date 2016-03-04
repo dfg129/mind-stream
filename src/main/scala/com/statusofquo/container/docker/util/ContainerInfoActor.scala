@@ -5,10 +5,14 @@ package docker.util
 import akka.actor.{Actor, ActorSystem, ActorRef, Props}
 import akka.event.Logging
 import akka.util.ByteString
-import akka.http.scaladsl.Http
+import akka.http.scaladsl.{ Http, HttpsConnectionContext }
 import akka.http.scaladsl.model._
 import akka.stream.ActorMaterializer
 import akka.stream.ActorMaterializerSettings
+import scala.util.{ Try, Success, Failure }
+import java.io._
+import java.security._
+import javax.net.ssl.{ SSLContext, KeyManagerFactory }
 
 class ContainerInfoActor(next: ActorRef) extends Actor {
 
@@ -23,11 +27,12 @@ class ContainerInfoActor(next: ActorRef) extends Actor {
   final implicit val materializer: ActorMaterializer = ActorMaterializer(ActorMaterializerSettings(actorSystem))
 
   val http = Http(actorSystem)
+  http.setDefaultClientHttpsContext(ContainerInfo.createHttpsContext)
 
  override def preStart() = {
     log.debug("#######  In the preStart")
 
-    http.singleRequest(HttpRequest(uri = "http://akka.io"))
+    http.singleRequest(HttpRequest(uri = "https://192.168.99.101:2376/images/json"))
      .pipeTo(self)
    }
 
@@ -37,12 +42,46 @@ class ContainerInfoActor(next: ActorRef) extends Actor {
     case HttpResponse(code, _, _, _) =>
       log.debug("### Request failed, response code: " + code)
     case msg => {
-        log.debug("############  inside " + msg + " #### " + next)
-        next ! msg
+        log.debug("############  inside "  + msg )
+
       }
     }
 }
 
-object ContainerInfoActor {
+object ContainerInfo {
   def props(next: ActorRef): Props = Props(new ContainerInfoActor(next))
+
+  def createHttpsContext: HttpsConnectionContext = {
+    //TODO  - remove password from code
+    val password = "mindstream".toCharArray
+
+    val keyStore = KeyStore.getInstance("PKCS12")
+    val context: HttpsConnectionContext = Try(loadCert(keyStore, password)) match {
+      case Success(_) => {
+          val keyManagerFactory = KeyManagerFactory.getInstance("SunX509")
+          keyManagerFactory.init(keyStore, password)
+
+          val context = SSLContext.getInstance("TLS")
+          context.init(keyManagerFactory.getKeyManagers, null, new SecureRandom)
+
+          new HttpsConnectionContext(context)
+        }
+      case Failure(e) => {
+          e.printStackTrace
+          throw e
+        }
+      }
+     context
+    }
+
+  def loadCert(keyStore: KeyStore, password: Array[Char]) = {
+    val stream = resourceStream("cert.p12")
+    keyStore.load(stream, password)
+  }
+
+  def resourceStream(resource: String): InputStream = {
+    val is = getClass.getClassLoader.getResourceAsStream(resource)
+    require(is ne null, s"Resource $resource not found")
+    is
+  }
 }
