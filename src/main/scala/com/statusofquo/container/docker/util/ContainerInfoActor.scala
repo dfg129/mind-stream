@@ -2,7 +2,7 @@ package com.statusofquo.container
 package docker.util
 
 
-import akka.actor.{Actor, ActorSystem, ActorRef, Props}
+import akka.actor.{Actor, ActorSystem, ActorRef, Props, Status }
 import akka.event.Logging
 import akka.util.ByteString
 import akka.http.scaladsl.{ Http, HttpsConnectionContext }
@@ -12,7 +12,7 @@ import akka.stream.ActorMaterializerSettings
 import scala.util.{ Try, Success, Failure }
 import java.io._
 import java.security._
-import javax.net.ssl.{ SSLContext, KeyManagerFactory }
+import javax.net.ssl._
 
 class ContainerInfoActor(next: ActorRef) extends Actor {
 
@@ -32,7 +32,7 @@ class ContainerInfoActor(next: ActorRef) extends Actor {
  override def preStart() = {
     log.debug("#######  In the preStart")
 
-    http.singleRequest(HttpRequest(uri = "https://192.168.99.101:2376/images/json"))
+    http.singleRequest(HttpRequest(uri = "https://192.168.99.101:2376/info"))
      .pipeTo(self)
    }
 
@@ -41,11 +41,13 @@ class ContainerInfoActor(next: ActorRef) extends Actor {
       log.debug("### Got response, body: " + entity.dataBytes.runFold(ByteString(""))(_ ++ _))
     case HttpResponse(code, _, _, _) =>
       log.debug("### Request failed, response code: " + code)
-    case msg => {
-        log.debug("############  inside "  + msg )
+    case msg: Status.Failure => {
+      log.debug("--------- received message of type {}", msg.cause.printStackTrace());
 
       }
+        log.debug("@@@@@@@@@@@@@@@@@@@@@@@")
     }
+
 }
 
 object ContainerInfo {
@@ -53,7 +55,7 @@ object ContainerInfo {
 
   def createHttpsContext: HttpsConnectionContext = {
     //TODO  - remove password from code
-    val password = "mindstream".toCharArray
+    val password = "dfg129".toCharArray
 
     val keyStore = KeyStore.getInstance("PKCS12")
     val context: HttpsConnectionContext = Try(loadCert(keyStore, password)) match {
