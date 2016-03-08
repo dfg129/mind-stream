@@ -8,7 +8,9 @@ import akka.actor.ExtendedActorSystem
 import com.typesafe.config.Config
 
 class SettingsExtension(config: Config) extends Extension {
-  val uri: String = config.getString("container.info.uri")
+  val dockerInfoReq: String = config.getString("container.info.uri")
+
+  val dbCntnrStart: String = config.getString("container.db.start.uri")
 }
 
 object Settings extends ExtensionId[SettingsExtension] with ExtensionIdProvider {

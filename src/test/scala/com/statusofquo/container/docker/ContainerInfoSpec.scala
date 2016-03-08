@@ -20,9 +20,6 @@ class ContainerInfoSpec() extends TestKit(ActorSystem())
   with LazyLogging
   with BeforeAndAfterAll {
 
-  //override implicit val system = ActorSystem("docker")
-
-//  val actorSystem = ActorSystem("docker")
 
 val testRef = system.actorOf(ContainerInfoActor.props(testActor))
 
@@ -38,7 +35,18 @@ val testRef = system.actorOf(ContainerInfoActor.props(testActor))
       val actorRef = TestActorRef(ContainerInfoActor.props(testActor))
 
       DockerRemoteComm.init
-      DockerRemoteComm.getDockerInfo(actorRef)
+      val settings = Settings(system)
+      DockerRemoteComm.sendDockerRequest(actorRef, settings.dockerInfoReq)
     }
   }
+
+  "A docker container start actor" should {
+   "return return container status" in {
+     val actorRef = TestActorRef(ContainerInfoActor.props(testActor))
+
+     DockerRemoteComm.init
+     val settings = Settings(system)
+     DockerRemoteComm.sendDockerRequest(actorRef, settings.dbCntnrStart)
+   }
+ }
 }
