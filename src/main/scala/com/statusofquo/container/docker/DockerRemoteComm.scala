@@ -32,13 +32,13 @@ object DockerRemoteComm {
     comm.http.setDefaultClientHttpsContext(createHttpsContext)
   }
 
-  def sendDockerRequest(actor: ActorRef, uri: String) = {
+  def sendDockerRequest(actor: ActorRef, uri: String, protocol: String) = {
     implicit val materializer: ActorMaterializer = ActorMaterializer(ActorMaterializerSettings(system))
 
     import akka.pattern.pipe
     import system.dispatcher
 
-    comm.http.singleRequest(HttpRequest(uri = uri))
+    comm.http.singleRequest(HttpRequest(HttpMethod.custom(protocol), uri = uri))
     .pipeTo(actor)
   }
 

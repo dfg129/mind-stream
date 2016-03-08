@@ -23,20 +23,19 @@ class ContainerInfoSpec() extends TestKit(ActorSystem())
 
 val testRef = system.actorOf(ContainerInfoActor.props(testActor))
 
-
    "A test" should {
        "run test1" in {
          info("####    testing 1")
        }
    }
 
-   "A docker info actor" should {
+ "A docker info actor" should {
     "return return docker machine info" in {
       val actorRef = TestActorRef(ContainerInfoActor.props(testActor))
 
       DockerRemoteComm.init
       val settings = Settings(system)
-      DockerRemoteComm.sendDockerRequest(actorRef, settings.dockerInfoReq)
+      DockerRemoteComm.sendDockerRequest(actorRef, settings.dockerInfoReq, settings.dbCntnrProtocol)
     }
   }
 
@@ -46,7 +45,7 @@ val testRef = system.actorOf(ContainerInfoActor.props(testActor))
 
      DockerRemoteComm.init
      val settings = Settings(system)
-     DockerRemoteComm.sendDockerRequest(actorRef, settings.dbCntnrStart)
+     DockerRemoteComm.sendDockerRequest(actorRef, settings.dbCntnrStart, settings.dbCntnrProtocol)
    }
  }
 }

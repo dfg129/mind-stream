@@ -30,7 +30,8 @@ with ScalaFutures {
   }
 
 
-  "A DreamsPost" should "be present using findAll" in {
+//  "A DreamsPost"
+ ignore should "be present using findAll" in {
     val f: Future[Seq[DreamsPost]] = DreamsPostsDAO findAll
 
     f onSuccess {

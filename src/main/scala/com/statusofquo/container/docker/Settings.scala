@@ -11,6 +11,8 @@ class SettingsExtension(config: Config) extends Extension {
   val dockerInfoReq: String = config.getString("container.info.uri")
 
   val dbCntnrStart: String = config.getString("container.db.start.uri")
+
+  val dbCntnrProtocol: String = config.getString("container.db.start.protocol")
 }
 
 object Settings extends ExtensionId[SettingsExtension] with ExtensionIdProvider {
