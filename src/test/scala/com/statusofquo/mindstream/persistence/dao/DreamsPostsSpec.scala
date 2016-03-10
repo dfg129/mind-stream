@@ -9,6 +9,7 @@ import slick.driver.PostgresDriver.api._
 import org.scalatest.{FlatSpec, Matchers}
 
 import models.definitions.DreamsPostsTable
+import models._
 
 
 import models.DreamsPost
@@ -29,9 +30,25 @@ with ScalaFutures {
     }
   }
 
+  "A DreamsPost" should "be created" in {
+    val f: Future[PostId] = DreamsPostsDAO create DreamsPost(1, "test", "body", "set")
 
-//  "A DreamsPost"
- ignore should "be present using findAll" in {
+    f onSuccess {
+      case msg => println("############  success of creation" + msg)
+    }
+
+    f onFailure {
+      case msg => println("###########  failure of creation " + msg)
+    }
+
+    whenReady(f) { result =>
+      println(result)
+      assert(result != null)
+    }
+  }
+
+
+  "A DreamsPost" should "be present using findAll" in {
     val f: Future[Seq[DreamsPost]] = DreamsPostsDAO findAll
 
     f onSuccess {

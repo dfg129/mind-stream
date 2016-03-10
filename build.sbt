@@ -24,6 +24,7 @@ libraryDependencies ++= Seq(
       "com.typesafe.slick" %% "slick" % "3.1.1",
       "org.postgresql"     %  "postgresql"    % "9.4-1201-jdbc41",
       "org.slf4j" % "slf4j-nop" % "1.6.4",
+      "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
       "org.scalactic" %% "scalactic" % "2.2.6",
       "org.scalatest" %% "scalatest" % "2.2.6" % Test,
       "io.spray" %%  "spray-json" % "1.3.2",

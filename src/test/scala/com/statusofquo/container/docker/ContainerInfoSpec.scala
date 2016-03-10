@@ -8,6 +8,7 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{ BeforeAndAfterAll, Matchers, WordSpecLike }
 import akka.stream.ActorMaterializer
 import scala.concurrent.Await
+import akka.http.scaladsl.model.HttpMethods._
 import scala.concurrent.duration._
 import com.typesafe.scalalogging._
 
@@ -35,7 +36,7 @@ val testRef = system.actorOf(ContainerInfoActor.props(testActor))
 
       DockerRemoteComm.init
       val settings = Settings(system)
-      DockerRemoteComm.sendDockerRequest(actorRef, settings.dockerInfoReq, settings.dbCntnrProtocol)
+      DockerRemoteComm.sendDockerRequest(actorRef, settings.dockerInfoReq, GET)
     }
   }
 
@@ -45,7 +46,7 @@ val testRef = system.actorOf(ContainerInfoActor.props(testActor))
 
      DockerRemoteComm.init
      val settings = Settings(system)
-     DockerRemoteComm.sendDockerRequest(actorRef, settings.dbCntnrStart, settings.dbCntnrProtocol)
+     DockerRemoteComm.sendDockerRequest(actorRef, settings.getDbCntnrCmds.cntnrStart._1, settings.getDbCntnrCmds.cntnrStart._2)
    }
  }
 }
