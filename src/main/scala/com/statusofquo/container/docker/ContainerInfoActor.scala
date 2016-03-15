@@ -1,7 +1,8 @@
 package com.statusofquo.container
+package docker
 
 
-import akka.actor.{Actor, ActorSystem, ActorRef, Props, Status }
+import akka.actor.{ Actor, ActorSystem, ActorRef, Props, Status }
 import akka.event.Logging
 import akka.util.ByteString
 import akka.http.scaladsl.{ Http, HttpsConnectionContext }
@@ -9,9 +10,6 @@ import akka.http.scaladsl.model._
 import akka.stream.ActorMaterializer
 import akka.stream.ActorMaterializerSettings
 import scala.util.{ Try, Success, Failure }
-import java.io._
-import java.security._
-import javax.net.ssl._
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global

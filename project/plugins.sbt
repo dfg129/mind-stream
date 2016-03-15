@@ -1,1 +1,1 @@
-addSbtPlugin("com.artima.supersafe" % "sbtplugin" % "1.1.0-RC5")
+addSbtPlugin("com.artima.supersafe" % "sbtplugin" % "1.1.0-RC6")

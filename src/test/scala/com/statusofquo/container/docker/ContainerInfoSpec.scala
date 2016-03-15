@@ -9,9 +9,7 @@ import org.scalatest.{ BeforeAndAfterAll, Matchers, WordSpecLike }
 import akka.stream.ActorMaterializer
 import scala.concurrent.Await
 import akka.http.scaladsl.model.HttpMethods._
-import scala.concurrent.duration._
 import com.typesafe.scalalogging._
-
 
 class ContainerInfoSpec() extends TestKit(ActorSystem())
   with ImplicitSender

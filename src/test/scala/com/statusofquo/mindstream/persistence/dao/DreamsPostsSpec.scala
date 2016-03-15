@@ -7,6 +7,7 @@ import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import slick.driver.PostgresDriver.api._
 import org.scalatest.{FlatSpec, Matchers}
+import scala.language.postfixOps
 
 import models.definitions.DreamsPostsTable
 import models._
