@@ -16,23 +16,7 @@ case class CntnrCmds(cntnr: String, cntnrCreate: (String, HttpMethod), cntnrRemo
 class SettingsExtension(config: Config) extends Extension {
   val dockerInfoReq: String = config.getString("container.info.uri")
 
-  def getDbCntnrCmds: CntnrCmds = {
-    val config = ConfigFactory.load()
-
-    val cntnr: String = config.getString("container.database.name")
-
-    val cntnrCreate: (String, HttpMethod) =
-      (config.getString(s"container.${cntnr}.create.uri"), POST)
-    val cntnrStart: (String, HttpMethod) =
-      (config.getString(s"container.${cntnr}.start.uri"), POST)
-    val cntnrStop: (String, HttpMethod) =
-      (config.getString(s"container.${cntnr}.stop.uri"), POST)
-    val cntnrRemove: (String, HttpMethod) =
-      (config.getString(s"container.${cntnr}.remove.uri"), POST)
-
-    CntnrCmds(cntnr, cntnrCreate, cntnrRemove, cntnrStart, cntnrStop)
-  }
-
+// persistent docker data volume settings
   def getStorageCntnrCmds: CntnrCmds = {
     val config = ConfigFactory.load()
 
@@ -54,4 +38,23 @@ object Settings extends ExtensionId[SettingsExtension] with ExtensionIdProvider 
   override def createExtension(system: ExtendedActorSystem) = {
     new SettingsExtension(system.settings.config)
   }
+
+  sealed trait DockerReq 
+
+  val config = ConfigFactory.load()
+
+  val dbcntnr: String = config.getString("container.database.name")
+
+  val dbCntnrCreate: (String, HttpMethod) =
+    (config.getString(s"container.${dbcntnr}.create.uri"), POST)
+
+  val dbCntnrStart: (String, HttpMethod) =
+    (config.getString(s"container.${dbcntnr}.start.uri"), POST)
+
+  val dbCntnrStop: (String, HttpMethod) =
+    (config.getString(s"container.${dbcntnr}.stop.uri"), POST)
+
+  val dbCntnrRemove: (String, HttpMethod) =
+    (config.getString(s"container.${dbcntnr}.remove.uri"), POST)
+
 }

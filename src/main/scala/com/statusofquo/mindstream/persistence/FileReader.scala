@@ -18,7 +18,7 @@ object FileReader {
 
 
   def checkFile = {
-    val file = new File("TestFile.txt")
+    val file = new File("application.conf")
     FileIO.fromFile(file).runWith(Sink.foreach(println))
   }
 }

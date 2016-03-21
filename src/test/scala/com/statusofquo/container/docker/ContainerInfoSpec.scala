@@ -39,12 +39,12 @@ val testRef = system.actorOf(ContainerInfoActor.props(testActor))
   }
 
   "A docker container start actor" should {
-   "return return container status" in {
+   "return status" in {
      val actorRef = TestActorRef(ContainerInfoActor.props(testActor))
 
      DockerRemoteComm.init
      val settings = Settings(system)
-     DockerRemoteComm.sendDockerRequest(actorRef, settings.getDbCntnrCmds.cntnrStart._1, settings.getDbCntnrCmds.cntnrStart._2)
+     DockerRemoteComm.sendDockerRequest(actorRef, settings.dbCntnrStart._1, settings.dbCntnrStart._2)
    }
  }
 }
