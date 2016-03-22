@@ -17,13 +17,11 @@ object FileReader {
   implicit val materializer = ActorMaterializer()
 
 
-
-  def checkFile = {
-    val file = new File("test.txt")
-    val foreach: Future[IOResult] = FileIO.fromFile(file)
-      .to(Sink.ignore)
+  val file = new File("test.txt")
+  val foreach: Future[IOResult] = FileIO.fromFile(file)
+      .to(Sink.foreach(println(_)))
       .run()
-  }
+
 
   def parseFile = ???
 
