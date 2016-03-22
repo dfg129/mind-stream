@@ -43,8 +43,7 @@ val testRef = system.actorOf(ContainerInfoActor.props(testActor))
      val actorRef = TestActorRef(ContainerInfoActor.props(testActor))
 
      DockerRemoteComm.init
-     val settings = Settings(system)
-     DockerRemoteComm.sendDockerRequest(actorRef, settings.dbCntnrStart._1, settings.dbCntnrStart._2)
+     DockerRemoteComm.sendDockerRequest(actorRef, Settings.dbCntnrStart.uri, Settings.dbCntnrStart.method)
    }
  }
 }

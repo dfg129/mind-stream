@@ -44,7 +44,6 @@ with ScalaFutures {
 
     whenReady(f) { result =>
       println(result)
-      assert(result != null)
     }
   }
 

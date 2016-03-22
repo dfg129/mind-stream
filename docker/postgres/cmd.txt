@@ -1,3 +1,5 @@
-docker run --rm -p 4009:5432 --name sgdbc sgdbi2
+docker create -v /dbdata --name dbstore ms_image  /bin/true
 
-psql -h $(docker-machine ip) -p 4009 -d docker -U docker --password
+docker run --volumes-from dbstore -p 4009:5432 --name  ms_docker ms_image
+
+psql -h $(docker-machine mindstream ip) -p 4009 -d docker -U docker --password
