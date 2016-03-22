@@ -5,20 +5,27 @@ package utils
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl._
-import java.io.File
+import scala.concurrent.Future
+import java.io._
 import akka.util.ByteString
 
 
 
 object FileReader {
-
+  import akka.stream.IOResult
   implicit val system = ActorSystem("mindstream")
-  import system.dispatcher
   implicit val materializer = ActorMaterializer()
 
 
+
   def checkFile = {
-    val file = new File("application.conf")
-    FileIO.fromFile(file).runWith(Sink.foreach(println))
+    val file = new File("test.txt")
+    val foreach: Future[IOResult] = FileIO.fromFile(file)
+      .to(Sink.ignore)
+      .run()
   }
+
+  def parseFile = ???
+
+  def insertIntoDb = ???
 }
