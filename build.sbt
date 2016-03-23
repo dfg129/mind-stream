@@ -13,6 +13,8 @@ lazy val akkaVersion = "2.4.2"
 
 lazy val testRun = taskKey[Unit]("My file test task")
 
+fork in testRun := true
+
 fullRunTask(testRun, Test, "com.statusofquo.mindstream.persistence.util.TestRun")
 
 lazy val root = (project in file(".")).
