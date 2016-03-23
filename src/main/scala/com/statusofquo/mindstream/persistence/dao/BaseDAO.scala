@@ -2,12 +2,13 @@ package com.statusofquo.mindstream.persistence
 package dao
 
 
-import models.definitions.{UsersTable, AddressesTable, EmailsTable, DreamsPostsTable}
+import models.definitions.{ UsersTable, AddressesTable, EmailsTable, DreamsPostsTable }
 import slick.dbio.{Effect, NoStream}
 import slick.lifted.TableQuery
 import slick.profile.{FixedSqlAction, SqlAction, FixedSqlStreamingAction}
-import utils.DatabaseConfig
+import util.DatabaseConfig
 import scala.concurrent.Future
+import scala.language.implicitConversions
 
 
 trait BaseDAO extends DatabaseConfig {

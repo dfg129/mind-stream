@@ -11,6 +11,9 @@ lazy val commonSettings = Seq(
 
 lazy val akkaVersion = "2.4.2"
 
+lazy val testRun = taskKey[Unit]("My file test task")
+
+fullRunTask(testRun, Test, "com.statusofquo.mindstream.persistence.util.TestRun")
 
 lazy val root = (project in file(".")).
   settings(commonSettings: _*).

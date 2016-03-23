@@ -1,5 +1,5 @@
 package com.statusofquo.mindstream.persistence
-package utils
+package util
 
 
 import akka.actor.ActorSystem

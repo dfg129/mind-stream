@@ -1,5 +1,5 @@
 package com.statusofquo.mindstream.persistence
-package utils
+package util
 
 trait DatabaseConfig extends Config {
   val driver = slick.driver.PostgresDriver
